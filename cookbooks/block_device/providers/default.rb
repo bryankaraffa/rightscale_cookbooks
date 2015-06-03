@@ -25,7 +25,8 @@ action :create do
   if new_resource.iops && !new_resource.iops.empty?
     create_options[:iops] = new_resource.iops
   end
-  create_options[:volume_type] = new_resource.volume_type
+  #create_options[:volume_type] = new_resource.volume_type	 # Original line for block_device
+  create_options[:volume_type] = 'gp2'				 # Forcing gp2 (general purpose ssd)
   # See rightscale_tools gem for implementation of "create" method.
   device.create(create_options)
 end
@@ -85,6 +86,7 @@ action :primary_restore do
     restore_args[:iops] = new_resource.iops
   end
   restore_args[:volume_type] = new_resource.volume_type
+  #restore_args[:volume_type] = 'gp2'
 
   # See rightscale_tools gem for definition of primary_restore method.
   device.primary_restore(new_resource.lineage, restore_args)
